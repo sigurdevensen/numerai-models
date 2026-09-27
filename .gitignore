@@ -1,2 +1,14 @@
 example-scripts
 v5.3
+
+# pixi environments (pixi.lock IS committed for reproducibility)
+.pixi/*
+!.pixi/config.toml
+
+# python
+__pycache__/
+*.pyc
+
+# training outputs (regenerate via src/train.mojo)
+artifacts/*
+!artifacts/.gitkeep

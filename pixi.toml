@@ -1,0 +1,25 @@
+[workspace]
+channels = ["https://conda.modular.com/max", "conda-forge"]
+name = "numerai-models"
+platforms = ["linux-64"]
+version = "0.1.0"
+
+[tasks]
+pull-data = "python scripts/pull_data.py"
+train = "mojo run src/train.mojo"
+submit-package = "python scripts/submit.py package"
+gpu-check-nvidia = "mojo build --target-accelerator sm_80 -o /tmp/gpu_kernels_nvidia src/gpu_kernels.mojo"
+gpu-check-amd = "mojo build --target-accelerator gfx942 -o /tmp/gpu_kernels_amd src/gpu_kernels.mojo"
+
+[dependencies]
+mojo = ">=1.1.0,<2"
+python = ">=3.14.7,<3.15"
+numpy = ">=2.5.3,<3"
+pandas = ">=3.0.6,<4"
+pyarrow = ">=25.0.0,<26"
+max = ">=26.6.0,<27"
+
+[pypi-dependencies]
+numerapi = ">=3.1.1, <4"
+cloudpickle = ">=3.1.2, <4"
+numerai-tools = ">=0.7.2, <0.8"
