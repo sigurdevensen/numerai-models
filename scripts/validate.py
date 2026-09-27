@@ -7,13 +7,8 @@ import pandas as pd
 from numerai_tools.scoring import numerai_corr
 
 
-def per_era_corr(predictions, targets, eras, min_mean=0.0, min_sharpe=0.0):
-    """Returns {mean, std, sharpe, n_eras, passed} for holdout predictions, era by era.
-
-    `passed` gates whether src/train.mojo proceeds to export/submit: mean CORR
-    must beat `min_mean` and the Sharpe (mean/std across eras) must beat
-    `min_sharpe`, i.e. the signal must be both positive and not noise-sized.
-    """
+def per_era_corr_series(predictions, targets, eras):
+    """Returns a pandas Series of Numerai CORR, indexed by era, one value per era."""
     df = pd.DataFrame(
         {
             "era": np.asarray(eras),
@@ -21,10 +16,20 @@ def per_era_corr(predictions, targets, eras, min_mean=0.0, min_sharpe=0.0):
             "target": np.asarray(targets, dtype=np.float64),
         }
     )
-    corrs = df.groupby("era").apply(
+    return df.groupby("era").apply(
         lambda e: numerai_corr(e[["prediction"]], e["target"]).iloc[0],
         include_groups=False,
     )
+
+
+def per_era_corr(predictions, targets, eras, min_mean=0.0, min_sharpe=0.0):
+    """Returns {mean, std, sharpe, n_eras, passed} for holdout predictions, era by era.
+
+    `passed` gates whether src/train.mojo proceeds to export/submit: mean CORR
+    must beat `min_mean` and the Sharpe (mean/std across eras) must beat
+    `min_sharpe`, i.e. the signal must be both positive and not noise-sized.
+    """
+    corrs = per_era_corr_series(predictions, targets, eras)
     mean = float(corrs.mean())
     std = float(corrs.std(ddof=0))
     sharpe = mean / std if std > 0 else 0.0
