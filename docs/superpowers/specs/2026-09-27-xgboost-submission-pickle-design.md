@@ -50,7 +50,8 @@ No other files change.
 
 ## Testing
 
-Run `pixi run python src/xgboost-model/main.py` and confirm:
+Run `python src/xgboost-model/main.py` (plain system Python, not `pixi run` — pixi is only
+needed for the Mojo pipeline; Python runs natively on this machine) and confirm:
 - `artifacts/xgboost_model.pkl` is written when holdout passes, and is loadable
   (`cloudpickle.load` + calling `predict()` on a small `DataFrame` slice of the feature columns
   returns a one-column `"prediction"` frame).
