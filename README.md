@@ -1,6 +1,6 @@
-# numerai-models
+# Numer.ai Models
 
-Models for [Numerai](https://numer.ai). Two independent projects:
+Models for [Numerai](https://numer.ai). Projects outside `claude` are mostly written by me, however I don't mind using claude for debugging and to speed up development. Currently there are two independent projects:
 
 - **`src/claude-model/`** - ridge regression trained from scratch with a native Mojo training loop (CPU + GPU kernels). Made using claude agents.
 - **`src/xgboost-model/`** - a plain Python/XGBoost baseline. Made by mostly me.
@@ -24,10 +24,11 @@ For mojo model, see [`src/claude-model/setup.md`](src/claude-model/setup.md) for
 **XGBoost baseline**:
 
 ```bash
+pip install -r requirements.txt
 python src/xgboost-model/main.py
 ```
 
-**Submit to Numerai Compute** (real, live — not automated):
+**Submit to Numerai Compute** (real, live - not automated):
 
 ```bash
 export NUMERAI_PUBLIC_ID=...
